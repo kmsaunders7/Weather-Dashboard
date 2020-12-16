@@ -1,0 +1,15 @@
+.navbar {
+    background-image: url(https://webat.net/wp-content/uploads/2018/05/cloud-cloudeffect.png);
+    color: rgb(10, 60, 102);
+    font-size: 50px;
+    text-shadow: 2px 2px white;
+    font-weight: bolder;
+    justify-content: center;
+}
+
+label {
+    color: rgb(3, 55, 99);
+    font-size: 20px;
+    font-weight: bolder;
+}
+
