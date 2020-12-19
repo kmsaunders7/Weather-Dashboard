@@ -14,7 +14,7 @@ $("#search-city").on("click", function(event) {
 })  
     //my individual api key for openweathermap
 
-var APIkey = "26397b10a7f204a93b15533da92e9276"
+// var APIkey = "26397b10a7f204a93b15533da92e9276"
 
 // create function called on the click button that then calls the weather URL,
 
@@ -24,13 +24,21 @@ function getWeather(cityName) {
     $('.forecastWeather').empty()
 
 // Here we construct our URL using weatherAPI and the city the user inputs
-    var queryURL = "api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + APIkey;
-
-
+    var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=26397b10a7f204a93b15533da92e9276"
+    //call the url 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
-        $("#city-view").text(JSON.stringify(response));
+        var city = response.city.name
+        console.log(city)
+        var temperature = response.list[0].main.temp
+        var date = moment().format('LLL')
+        var humidity = response.list[0].main.humidity
+        var windSpeed = response.list[0].wind.speed
+        var icon = response.list[0].weather.icon
+        var longitude = response.city.coord.lon
+        var latitude = response.city.coord.lat
+        // $("#city-view").text(JSON.stringify(response));
     });
 
