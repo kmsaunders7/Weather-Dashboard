@@ -4,14 +4,30 @@ $('#search-city').on('click', function(event) {
     event.preventDefault();
 
     // Here we grab the text from the input box
-    var cityName= $('#city-input').val().trim;
+    var cityName= $('#city-input').val().trim();
     getWeather(cityName)
-    if (!localStorage.getItem(cityName)) {
-        storeButton(cityName)
+    if (!localStorage.getItem("cities")) {
+        var savedCities =  []; // []
+        savedCities.push(cityName);
+ 
+        localStorage.setItem('cities', JSON.stringify(savedCities))
+    } else {
+       var savedCities =  JSON.parse(localStorage.getItem("cities")); // []
+       console.log(savedCities);
+       savedCities.push(cityName);
+
+       localStorage.setItem('cities', JSON.stringify(savedCities));
+
     }
     $('#city-input').val('')
 
 })  
+
+var cities =  JSON.parse(localStorage.getItem("cities"));
+
+for (var i=0; i < cities.length; i++) {
+    $('#searchHistory').append("<button>" + cities[i] + "</button>")
+}
 
 //my individual api key for openweathermap
 // var APIkey = "26397b10a7f204a93b15533da92e9276"
@@ -22,22 +38,24 @@ function getWeather(cityName) {
     $('.forecastWeather').empty()
 
 // Here we construct our URL using weatherAPI and the city the user inputs
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=26397b10a7f204a93b15533da92e9276"
+    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=26397b10a7f204a93b15533da92e9276"
     //call the url 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
-        var city = response.city.name
+        console.log(response)
+        var location = response.name
+        
         // console.log(city)
         // variable for differnent response calls 
-        var temperature = response.list[0].main.temp
+        var temperature = response.main.temp
         var date = moment().format('LLL')
-        var humidity = response.list[0].main.humidity
-        var windSpeed = response.list[0].wind.speed
-        var icon = response.list[0].weather.icon
-        var longitude = response.city.coord.lon
-        var latitude = response.city.coord.lat
+        var humidity = response.main.humidity
+        var windSpeed = response.wind.speed
+        var icon = response.weather[0].icon
+        var longitude = response.coord.lon
+        var latitude = response.coord.lat
        
         //create a new div to display the current weather
         var weatherContainer = $('<div>').addClass('current-body')
@@ -54,12 +72,13 @@ function getWeather(cityName) {
         windText = $('<h2>').attr('class', 'row').text('Wind Speed= ' + windSpeed + 'mph')
 
         //new url code for the uv index, it needs the longitude and latitude coordinates:
-        var urlUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" longitude + "&appid=26397b10a7f204a93b15533da92e9276"
+        var urlUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=26397b10a7f204a93b15533da92e9276"
         $.ajax({
             url: urlUV,
             method: "GET"
             }).then(function(response) {
-            var uVI = response.data.value
+                console.log(response)
+            var uVI = response.value
             //each index number will create a different color in the box depending on how high the number   
             var color 
                     if (uVI < 3) {
@@ -72,12 +91,22 @@ function getWeather(cityName) {
                     color = "red"
                     }
             //variable to create the htag with to put uv info...append to the weather container        
-            var UVBox = $('<h2>').attr('class', 'row card-uv').text("Ultraviolet Index= ").append($('<span>').attr('class', 'UVI').attr('style', 'text-align: center; background-color:' + color)).text(UVI))
+            var UVBox = $('<h2>').attr('class', 'row card-uv').text("Ultraviolet Index= ").append($('<span>').attr('class', 'UVI').attr('style', 'text-align: center; background-color:' + color)).text(uVI)
             weatherContainer.append(UVBox)
         })
         //append new uvbox into weather container
         $('#weatherContainer').append(weatherContainer)
 
+        var forecastURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=imperial&appid=26397b10a7f204a93b15533da92e9276'
+        
+        $.ajax({
+            url: forecastURL,
+            method: "GET"
+        }).then(function(response){
+        console.log(moment(response.list[0].dt_txt).format('M/D'))
+        
+        
+        })
         var fiveDay = $('#fiveDay').attr('class', 'card')
         var subtitle = $('<h3>').text('5 Day Forecast:')
         fiveDay.append(subtitle)
@@ -86,7 +115,7 @@ function getWeather(cityName) {
         // for loop to display the forecasted weather
         for (var i=0; i < response.list.length; i++)
             var dayCard = $('<div>').addClass('card col col-2 fiveday')
-            var day = $('<h4>').text(moment(response.list[i].dt_text).format('M/D'))
+            var day = $('<h4>').text(moment(response.list[i].dt_txt).format('M/D'))
             dayCard.append(day)
             var dailyImage = $('<img>').attr('src', response.list[i].weather[0].icon)
             dayCard.append(dailyImage)
@@ -97,7 +126,7 @@ function getWeather(cityName) {
             forecast.append(dayCard)
             fiveDay.append(forecast)
         
-    }
-
     })
+
+    }
 
