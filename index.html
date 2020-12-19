@@ -17,9 +17,10 @@
         </nav>
     </header>  
     <div class="container">
-          <div class="col-sm-3">
-              <!-- This form will be where users input the name of city searching for -->
-              <form id="city-form">
+        <div class="row">
+            <div class="col-4">
+                <!-- This form will be where users input the name of city searching for -->
+              <form id="city-form" class="container form">
                 <label for="city-input">Search for a City:</label>
                 <input type="text" id="city-input">
                 <!-- This button will start our AJAX call -->
@@ -27,14 +28,29 @@
               </form>
              <!-- The list of cities already searched for --> 
               <div id="searchHistory">
-            <!-- clear button to remove the list of previously searched cities -->
+                <!-- clear button to remove the list of previously searched cities -->
             </div>
-    <section>
-        <!-- Section for current weather of the city they have highlighted -->
-        <div class="currentWeather card"></div>
-        <!-- 5 boxes for each day of forecast weather will go here, appended in js -->
-        <div class="forecastWeather container"></div>
-    </section>    
+
+            </div>
+            <div class="col-7">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                        Current Weather
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            Five Day Forecast:
+                        </div>
+                            <div class="card-body">
+                                <div class="row fiveday">
+                                 </div>
+                            </div>  
+                    </div>
+        </div>
+    </div>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="script.js"></script>
