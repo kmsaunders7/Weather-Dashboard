@@ -1,15 +1,15 @@
 
 //once the user clicks the search button this function will be called
-$("#search-city").on("click", function(event) {
+$('#search-city').on('click', function(event) {
     event.preventDefault();
 
     // Here we grab the text from the input box
-    var cityName= $("#city-input").val().trim;
+    var cityName= $('#city-input').val().trim;
     getWeather(cityName)
     if (!localStorage.getItem(cityName)) {
         storeButton(cityName)
     }
-    $("#city-input").val("")
+    $('#city-input').val('')
 
 })  
 
@@ -50,8 +50,35 @@ function getWeather(cityName) {
         var tempText = $('<h2>').attr('class', 'row').text('Temperature= ' + temperature + 'degrees F')
         weatherContainer.append(tempText)
         var humidityText = $('<h2>').attr('class', 'row').text('Humidity= ' + humidity + '%')
-        weatherContainer.append(humText)
+        weatherContainer.append(humidityText)
         windText = $('<h2>').attr('class', 'row').text('Wind Speed= ' + windSpeed + 'mph')
+
+        //new url code for the uv index, it needs the longitude and latitude coordinates:
+        var urlUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" longitude + "&appid=26397b10a7f204a93b15533da92e9276"
+        $.ajax({
+            url: urlUV,
+            method: "GET"
+            }).then(function(response) {
+            var uVI = response.data.value
+            //each index number will create a different color in the box depending on how high the number   
+            var color 
+                    if (uVI < 3) {
+                    color = "green"
+                    } else if (uVI >= 3 || uVI < 6) {
+                    color = "yellow"
+                    } else if (uVI >= 6 || uVI < 8) {
+                    color = "orange"
+                    } else {
+                    color = "red"
+                    }
+            //variable to create the htag with to put uv info...append to the weather container        
+            var UVBox = $('<h2>').attr('class', 'row card-uv').text("Ultraviolet Index= ").append($('<span>').attr('class', 'UVI').attr('style', 'text-align: center; background-color:' + color)).text(UVI))
+            weatherContainer.append(UVBox)
+        })
+        //append new uvbox into weather container
+        $('#weatherContainer').append(weatherContainer)
+
+        
 
     });
 
