@@ -15,29 +15,38 @@
             Weather Dashboard
             </span>
         </nav>
-    </header>
-    
-    <div class="container col-3">
-        <!-- This form will be where users input the name of city searching for -->
-        <form id="city-form">
-            <label for="city-input">Search for a City:</label>
-            <br>
-            <input type="text" id="city-input">
-            <!-- This button will start our AJAX call -->
-            <button class="btn btn-primary searchBtn" id="city-search"></button>
-        </form>
-    </div>    
-    <div class="col-9">
-        <div class="currentWeather"></div>
-            <div class="container p-3"></div>
-        <!-- clear button to remove the list of previously searched cities -->
-        <!-- The list of cities already searched for -->
+    </header>  
+    <div class="container">
+          <div class="col-sm-3">
+              <!-- This form will be where users input the name of city searching for -->
+              <form id="city-form">
+                <label for="city-input">Search for a City:</label>
+                <input type="text" id="city-input">
+                <!-- This button will start our AJAX call -->
+                <button class="btn btn-primary searchBtn" id="search-city"><i class="fas fa-search"></i></button>
+              </form>
+             <!-- The list of cities already searched for --> 
+              <div id="searchHistory">
+            <!-- clear button to remove the list of previously searched cities -->
+            </div>
+    <section>
         <!-- Section for current weather of the city they have highlighted -->
-
-
-        <!-- 5 rows for each day of forecast weather -->
+        <div class="currentWeather card"></div>
+        <!-- 5 boxes for each day of forecast weather will go here, appended in js -->
+        <div class="forecastWeather container"></div>
+    </section>
         
-    </div>
+    
+
+            
+        
+        
+        
+
+
+        
+        
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="script.js"></script>
 </body>
