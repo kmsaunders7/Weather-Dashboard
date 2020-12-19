@@ -12,11 +12,9 @@ $("#search-city").on("click", function(event) {
     $("#city-input").val("")
 
 })  
-    //my individual api key for openweathermap
 
+//my individual api key for openweathermap
 // var APIkey = "26397b10a7f204a93b15533da92e9276"
-
-// create function called on the click button that then calls the weather URL,
 
 function getWeather(cityName) {
     // start with an empty field in both the current weather and five day forecast spots
@@ -47,6 +45,13 @@ function getWeather(cityName) {
         var setIcon = $('<img>').attr('src', 'http://openweathermap.org/img/w/' + icon + '.png')
         cityTitle.append(setIcon)
         weatherContainer.append(cityTitle)
+
+        // this headers will hold the text to describe the current weather, will go in the current-body div created
+        var tempText = $('<h2>').attr('class', 'row').text('Temperature= ' + temperature + 'degrees F')
+        weatherContainer.append(tempText)
+        var humidityText = $('<h2>').attr('class', 'row').text('Humidity= ' + humidity + '%')
+        weatherContainer.append(humText)
+        windText = $('<h2>').attr('class', 'row').text('Wind Speed= ' + windSpeed + 'mph')
 
     });
 
