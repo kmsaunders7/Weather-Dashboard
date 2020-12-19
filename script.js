@@ -31,7 +31,8 @@ function getWeather(cityName) {
         method: "GET"
     }).then(function(response) {
         var city = response.city.name
-        console.log(city)
+        // console.log(city)
+        // variable for differnent response calls 
         var temperature = response.list[0].main.temp
         var date = moment().format('LLL')
         var humidity = response.list[0].main.humidity
@@ -39,6 +40,13 @@ function getWeather(cityName) {
         var icon = response.list[0].weather.icon
         var longitude = response.city.coord.lon
         var latitude = response.city.coord.lat
-        // $("#city-view").text(JSON.stringify(response));
+       
+        //create a new div to display the current weather
+        var weatherContainer = $('<div>').addClass('current-body')
+        var cityTitle = $('<h1>').text(location + ' (' + date + ') ')
+        var setIcon = $('<img>').attr('src', 'http://openweathermap.org/img/w/' + icon + '.png')
+        cityTitle.append(setIcon)
+        weatherContainer.append(cityTitle)
+
     });
 
