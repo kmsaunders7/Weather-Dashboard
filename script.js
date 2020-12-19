@@ -22,7 +22,7 @@ function getWeather(cityName) {
     $('.forecastWeather').empty()
 
 // Here we construct our URL using weatherAPI and the city the user inputs
-    var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=26397b10a7f204a93b15533da92e9276"
+    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=26397b10a7f204a93b15533da92e9276"
     //call the url 
     $.ajax({
         url: queryURL,
@@ -78,7 +78,26 @@ function getWeather(cityName) {
         //append new uvbox into weather container
         $('#weatherContainer').append(weatherContainer)
 
-        
+        var fiveDay = $('#fiveDay').attr('class', 'card')
+        var subtitle = $('<h3>').text('5 Day Forecast:')
+        fiveDay.append(subtitle)
 
-    });
+        var forecast = $('<div>').attr('class', 'row')
+        // for loop to display the forecasted weather
+        for (var i=0; i < response.list.length; i++)
+            var dayCard = $('<div>').addClass('card col col-2 fiveday')
+            var day = $('<h4>').text(moment(response.list[i].dt_text).format('M/D'))
+            dayCard.append(day)
+            var dailyImage = $('<img>').attr('src', response.list[i].weather[0].icon)
+            dayCard.append(dailyImage)
+            var dailyTemp = $('<p>').text('Temp= ' + response.list[i].main.temp + '%')
+            dayCard.append(dailyTemp)
+            var dailyHum = $('<p>').text('Humidity= ' + response.list[i].main.humidity)
+            dayCard.append(dailyHum)
+            forecast.append(dayCard)
+            fiveDay.append(forecast)
+        
+    }
+
+    })
 
