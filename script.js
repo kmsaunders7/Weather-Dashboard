@@ -37,7 +37,7 @@ function getWeather(cityName) {
     // $('.currentWeather').empty()
     // $('.forecastWeather').empty()
 
-// Here we construct our URL using weatherAPI and the city the user inputs
+    // Here we construct our URL using weatherAPI and the city the user inputs
     var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=26397b10a7f204a93b15533da92e9276"
     //call the url 
     $.ajax({
@@ -54,43 +54,39 @@ function getWeather(cityName) {
         var setIcon = $('<img>').attr('src', 'http://openweathermap.org/img/w/' + response.weather[0].icon + '.png').addClass('icon')
         $('.currentWeather').append(location, temperature, humidity, windSpeed, setIcon)
        
+        //get longitude and latitude coordinates to plug in for the UVIndex
+        var longitude = response.coord.lon
+        var latitude = response.coord.lat
 
+        // new url code for the uv index, it needs the longitude and latitude coordinates:
+        var urlUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=26397b10a7f204a93b15533da92e9276"
+        
+        $.ajax({
+            url: urlUV,
+            method: "GET"
+            }).then(function(response) {
+                
+            var UVI = response.value
+            console.log(UVI)
+            //each index number will create a different color in the box depending on how high the number   
+            var color 
+                    if (UVI < 3) {
+                    color = "green"
+                    } else if (UVI >= 3 || UVI < 6) {
+                    color = "yellow"
+                    } else if (UVI >= 6 || UVI < 8) {
+                    color = "orange"
+                    } else {
+                    color = "red"
+                    }
+                    console.log(color)
+                var UVBox = $('<h5>').text('UV Index: ' + UVI).attr('style', 'background-color:' + color)
+                $('.currentWeather').append(UVBox)
+            })        
     })
 }
     
- 
-
-
-        // var longitude = response.coord.lon
-        // var latitude = response.coord.lat
-
-
-        //new url code for the uv index, it needs the longitude and latitude coordinates:
-    //     var urlUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=26397b10a7f204a93b15533da92e9276"
-    //     $.ajax({
-    //         url: urlUV,
-    //         method: "GET"
-    //         }).then(function(response) {
-    //             console.log(response)
-    //         var uVI = response.value
-    //         //each index number will create a different color in the box depending on how high the number   
-    //         var color 
-    //                 if (uVI < 3) {
-    //                 color = "green"
-    //                 } else if (uVI >= 3 || uVI < 6) {
-    //                 color = "yellow"
-    //                 } else if (uVI >= 6 || uVI < 8) {
-    //                 color = "orange"
-    //                 } else {
-    //                 color = "red"
-    //                 }
-    //         //variable to create the htag with to put uv info...append to the weather container        
-    //         var UVBox = $('<h2>').attr('class', 'row card-uv').text("Ultraviolet Index= ").append($('<span>').attr('class', 'UVI').attr('style', 'text-align: center; background-color:' + color)).text(uVI)
-    //         currentWeather.append(UVBox)
-    //     })
-    //     //append new uvbox into weather container
-    //     $('#weatherContainer').append(weatherContainer)
-    // })    
+  
         
     
     // function getForecast() {
