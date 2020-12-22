@@ -2,20 +2,14 @@
 //once the user clicks the search button this function will be called
 $('#search-city').on('click', function(event) {
     event.preventDefault();
+    // Here we grab the text from the input box
     var cityName= $('#city-input').val().trim();
     getWeather(cityName)
 
     
-    
-    $('#searchHistory').append("<button class='prevCity'>" + cityName + "</button>")
-    
-    
-    // var addButton = $('<button>').addClass('btn btn-primary btn-lg')
-    // var addCity = addButton.text(cityName)
-    // $('#searchHistory').append(addCity)
-
-    // Here we grab the text from the input box
-    
+    //adds button once the search city is input
+    $('#searchHistory').append("<button class='prevCity'>" + cityName + "</button>") 
+    //checks to see if city is in local storage yet, if not it adds, if it is in there is does not duplicate
     if (!localStorage.getItem("cities")) {
         var savedCities =  []; 
         var isDuplicate = savedCities.includes(cityName);
