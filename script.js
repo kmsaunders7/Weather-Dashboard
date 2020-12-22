@@ -4,37 +4,56 @@ $('#search-city').on('click', function(event) {
     event.preventDefault();
     var cityName= $('#city-input').val().trim();
     getWeather(cityName)
+
     
-    var addButton = $('<button>').addClass('btn btn-primary btn-lg')
-    var addCity = addButton.text(cityName)
-    $('#searchHistory').append(addCity)
+    
+    $('#searchHistory').append("<button class='prevCity'>" + cityName + "</button>")
+    
+    
+    // var addButton = $('<button>').addClass('btn btn-primary btn-lg')
+    // var addCity = addButton.text(cityName)
+    // $('#searchHistory').append(addCity)
 
     // Here we grab the text from the input box
     
     if (!localStorage.getItem("cities")) {
         var savedCities =  []; 
+        var isDuplicate = savedCities.includes(cityName);
+        if (!isDuplicate) {
         savedCities.push(cityName);
  
         localStorage.setItem('cities', JSON.stringify(savedCities))
+        }
     } else {
        var savedCities =  JSON.parse(localStorage.getItem("cities")); // []
-       console.log(savedCities);
-       savedCities.push(cityName);
-
-       localStorage.setItem('cities', JSON.stringify(savedCities));
-
+       var isDuplicate = savedCities.includes(cityName);
+        if (!isDuplicate) {
+        savedCities.push(cityName);
+ 
+        localStorage.setItem('cities', JSON.stringify(savedCities))
+        }
     }
     $('#city-input').val('')
 
-})  
+}) 
+
+
 
 var cities =  JSON.parse(localStorage.getItem("cities"));
 
 for (var i=0; i < cities.length; i++) {
-    $('#searchHistory').append("<button>" + cities[i] + "</button>")
+    $('#searchHistory').append("<button class='prevCity'>" + cities[i] + "</button>")
 }
 
+$('.prevCity').on('click', function() {
+    var clickCity = $(this).text()
+    getWeather(clickCity)
+})
 
+$(document).ready(function() {
+    var lastCity = cities[cities.length-1]
+    getWeather(lastCity)
+})
 
 //my individual api key for openweathermap
 // var APIkey = "26397b10a7f204a93b15533da92e9276"
@@ -42,8 +61,8 @@ for (var i=0; i < cities.length; i++) {
 
 
 function getWeather(cityName) {
-    $('.currentWeather').empty
-    $('.fiveday').empty
+    $('.currentWeather').empty()
+    $('.fiveday').empty()
     // Here we construct our URL using weatherAPI and the city the user inputs
     var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=26397b10a7f204a93b15533da92e9276"
     //call the url 
