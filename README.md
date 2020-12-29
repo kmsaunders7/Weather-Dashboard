@@ -1,5 +1,4 @@
 # Weather-Dashboard
-# Day-Planner
 >> Check the Weather!
 
 Type a city into the search box, click the search icon and you will get the current weather and the five day forecast!!
